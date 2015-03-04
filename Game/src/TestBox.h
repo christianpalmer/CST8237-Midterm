@@ -10,7 +10,9 @@ struct SDL_Texture;
 class TestBox: public GameObject
 {
 public:
-  void Initialize(SDL_Renderer *renderer) = 0;
+	 ~TestBox();
+	 TestBox();
+  void Initialize(SDL_Renderer *renderer);
 
   void Update(float dt);
   void Draw(SDL_Renderer *renderer, float dt);
@@ -18,7 +20,6 @@ public:
   void SetRotationSpeed(float rotationSpeed);
 
 protected:
-  ~TestBox();
 
   SDL_Texture *_testTexture;
   SDL_Rect _testTextureBounds;

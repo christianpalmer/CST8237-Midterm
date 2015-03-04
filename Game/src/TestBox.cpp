@@ -1,23 +1,34 @@
 #include "TestBox.h"
 #include <SDL.h>
 #include <SDL_image.h>
+#include <stdlib.h>
+#include <ctime>
 
-float _rotationSpeed = 1.0f;
+float _rotationSpeed = 1000.0f;
 
 TestBox::~TestBox()
 {
   SDL_DestroyTexture(_testTexture);
 }
 
+TestBox::TestBox()
+{
+}
+
 void TestBox::Initialize(SDL_Renderer *renderer)
 {
+	srand(time(NULL));
   // Load our texture.
   _testTexture = IMG_LoadTexture(renderer, "res/UV.jpg");
   _transform.rotation.z = 0.0f;
 
   /* Query the texture to get it's size. We then use it's size to offset where the texture will draw relative to,
   * since the default is it's top corner (0,0). */
-  _testTextureBounds = { 0, 0, 0, 0 };
+  _testTextureBounds.h = 0;
+  _testTextureBounds.w = 0;
+  _testTextureBounds.x = 0;
+  _testTextureBounds.y = 0;
+
   SDL_QueryTexture(_testTexture, nullptr, nullptr, &_testTextureBounds.w, &_testTextureBounds.h);
   _testTextureBounds.x -= _testTextureBounds.w / 2;
   _testTextureBounds.y -= _testTextureBounds.h / 2;
@@ -27,8 +38,8 @@ void TestBox::Initialize(SDL_Renderer *renderer)
 
   /* This center will only be the point we rotate around; not the point we draw relative to. So if I set this center to be the middle
   * of the texture, it will still draw at (0,0), and rotate around (250,250), which is where the middle of the texture would be. */
-  _testTextureRotationCenter = { _testTextureBounds.w / 2, _testTextureBounds.h / 2 };
-
+  _testTextureRotationCenter.x = _testTextureBounds.w / 2;
+  _testTextureRotationCenter.y =  _testTextureBounds.h / 2;
   _transform.scale.x = 1.0f;
   _transform.scale.y = 1.0f;
   _transform.scale.z = 1.0f;
@@ -36,7 +47,14 @@ void TestBox::Initialize(SDL_Renderer *renderer)
 
 void TestBox::Update(float dt)
 {
-  _transform.rotation.z += _rotationSpeed * dt;
+	
+	_rotationSpeed = rand() % 100;
+
+	if (_rotationSpeed  > rand() % 100 )
+	{
+		_rotationSpeed*= -1;
+	}
+  _transform.rotation.z += _rotationSpeed * dt * 400;
 }
 
 void TestBox::Draw(SDL_Renderer *renderer, float dt)

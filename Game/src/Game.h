@@ -13,9 +13,7 @@ class Game: public GameEngine
 
 public:
   ~Game();
-
-protected:
-  Game();
+   Game();
 
   void InitializeImpl();
   void UpdateImpl(float dt);
@@ -24,6 +22,8 @@ protected:
   void Reset();
   void CalculateDrawOrder(std::vector<GameObject *>& drawOrder);
 
+protected:
+ 
   TestBox _firstBox;
   TestBox _secondBox;
   TestBox _thirdBox;
